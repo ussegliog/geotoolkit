@@ -144,6 +144,23 @@ public class ProcessEvent extends EventObject {
     }
 
     /**
+     * Creates a new event with the given source, task, progress output and exception.
+     *
+     * @param source    The source of this event.
+     * @param task      A message that describe the task under execution, or {@code null} if none.
+     * @param progress  The progress as a number between 0 and 100, or {@link Float#NaN} if undetermined.
+     * @param output    The output (intermediate calculation of final result), or {@code null} if none.
+     * @param exception An error or warning that occurred while executing the task, or {@code null} if none.
+     */
+    public ProcessEvent(final Process source, final CharSequence task, final float progress, final ParameterValueGroup output, final Exception exception) {
+        super(source);
+        this.progress  = progress;
+        this.task      = Types.toInternationalString(task);
+	this.output    = output;
+	this.exception = exception;
+    }
+
+    /**
      * Returns the source of this event.
      */
     @Override

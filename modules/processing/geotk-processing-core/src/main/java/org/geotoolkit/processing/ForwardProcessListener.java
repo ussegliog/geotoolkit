@@ -2,6 +2,7 @@ package org.geotoolkit.processing;
 
 import org.geotoolkit.process.ProcessEvent;
 import org.geotoolkit.process.ProcessListener;
+import org.opengis.parameter.ParameterValueGroup;
 import org.opengis.util.InternationalString;
 
 /**
@@ -66,11 +67,13 @@ public class ForwardProcessListener implements ProcessListener {
 
     @Override
     public void progressing(ProcessEvent processEvent) {
+	System.out.println("Hello Forward Listener ");
+
         String processName = getProcessName(processEvent);
         String msg = processName + " : " + processEvent.getTask().toString();
 
         float progress = taskPercentStart + (taskWorkLength * (processEvent.getProgress() / 100f));
-        fireProgressing(msg, progress, processEvent.getException());
+        fireProgressing(msg, progress, processEvent.getOutput(), processEvent.getException());
     }
 
     @Override
@@ -78,8 +81,8 @@ public class ForwardProcessListener implements ProcessListener {
         //no forward
     }
 
-    private void fireProgressing(String message, float progress, Exception ex) {
-        final ProcessEvent event = new ProcessEvent(parentProcess, message, progress, ex);
+    private void fireProgressing(String message, float progress, ParameterValueGroup output, Exception ex) {
+        final ProcessEvent event = new ProcessEvent(parentProcess, message, progress, output, ex);
         final ProcessListener[] listeners = parentProcess.getListeners();
         for (ProcessListener listener : listeners) {
             listener.progressing(event);
